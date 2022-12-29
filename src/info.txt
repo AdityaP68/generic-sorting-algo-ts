@@ -1,0 +1,131 @@
+
+// // Strings in js are immutable
+// class Sorter {
+//     constructor(public collection: number[] | string | LinkedList) {}
+  
+//     //bad code as if we want to add something more in this logic we need to add it in the union op
+//     //hance need to add additional if statements again and again hence scaling issues
+//     sort(): void {
+//       for (let i = 0; i < this.collection.length; i++) {
+//         for (let j = 0; j < this.collection.length - i - 1; j++) {
+
+//         //  if(this.collection instanceof LinkedList){
+
+//         //  }
+
+//           // only for array of numbers
+//           // hence we use a type gaurd to trick ts that this is 100% array which gets rid of the restriction
+//           // of the union operator in number[] | string
+//          if(this.collection instanceof Array){
+            
+//             if (this.collection[j] > this.collection[j + 1]) {
+//                 let temp = this.collection[j];
+//                 this.collection[j] = this.collection[j +1];
+//                 this.collection[j+1] = temp;
+//               }
+//          }
+
+//          // type gaurd for string
+//          if(typeof this.collection === 'string'){
+            
+//          }
+//         }
+//       }
+//     }
+//   }
+  
+//   const arr = new Sorter([1,2,-1,0,9])
+//   arr.sort()
+//   console.log(arr.collection)
+
+
+
+
+class Node {
+  next: Node | null = null;
+  // data: number;
+
+  // constructor(data: number){
+  //     this.data = data;
+  // }
+  // or
+  constructor(public data: number) {}
+}
+
+export class LinkedList {
+  head: Node | null = null;
+
+  add(data: number): void {
+    const node = new Node(data);
+    if (!this.head) {
+      this.head = node;
+    }
+    let tail = this.head;
+    while (tail.next) {
+      tail = tail.next;
+    }
+
+    tail.next = node;
+  }
+
+  get length(): number {
+    if (!this.head) {
+      return 0;
+    }
+    let length = 1;
+    let node = this.head;
+    while (node.next) {
+      length++;
+      node = node.next;
+    }
+    return length;
+  }
+
+  at(index: number): Node {
+    if (!this.head) {
+      throw new Error("Index out of bounds");
+    }
+
+    let counter = 0;
+    // to help type inference
+    let node: Node | null = this.head;
+    while (node) {
+      if (counter === index) {
+        return node;
+      }
+      counter++;
+      node = node.next;
+    }
+    throw new Error("Index out of bounds");
+  }
+
+  compare(leftIndex: number, rightIndex: number): boolean {
+    if (!this.head) {
+      throw new Error("The list is empty");
+    }
+
+    return this.at(leftIndex).data > this.at(rightIndex).data;
+  }
+
+  // rather than swapping nodes we swap the values as its much much easier
+  swap(leftIndex: number, rightIndex: number): void {
+    const leftNode = this.at(leftIndex);
+    const rightNode = this.at(rightIndex);
+
+    const temp = leftNode.data;
+    leftNode.data = rightNode.data;
+    rightNode.data = temp;
+  }
+
+  print(): void {
+    if (!this.head) {
+      return;
+    }
+
+    let node: Node | null = this.head;
+    while (node) {
+      console.log(node.data);
+      node = node.next;
+    }
+  }
+}
